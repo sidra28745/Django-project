@@ -1,0 +1,73 @@
+
+<head>
+    <title>Asset List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Asset List</h1>
+    <table id="assetTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>QR Code</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+            <tr>
+                <td>{{ asset.name }}</td>
+                <td>{{ asset.qrcode }}</td>
+                <td>{{ asset.description }}</td>
+                <td>{{ asset.category }}</td>
+                <td><img src="{{ asset.image.url }}" alt="Asset Image"></td>
+                <td>
+                    <button onclick="location.href='{% url 'image' asset.id %}'">Edit</button>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr id="newRowTemplate" style="display: none;">
+                <td><input type="text" name="name"></td>
+                <td><input type="file" name="qrcode"></td>
+                <td><input type="text" name="description"></td>
+                <td><input type="text" name="category"></td>
+                <td><input type="file" name="image"></td>
+                <td><button onclick="removeRow(this)">Remove</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button onclick="addNewRow()">Add New Asset</button>
+
+    <script>
+        function addNewRow() {
+            var table = document.getElementById("assetTable").getElementsByTagName('tbody')[0];
+            var newRow = document.getElementById("newRowTemplate").cloneNode(true);
+            newRow.removeAttribute('id');
+            newRow.style.display = 'table-row';
+            table.appendChild(newRow);
+        }
+
+        function removeRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+</body>
